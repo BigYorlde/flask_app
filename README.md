@@ -31,8 +31,10 @@
     # application:application - файл, содержащий приложение : имя этого приложения
 
 Запуск gunicorn в фоновом режиме без привязки к сессии юзера с помощью Supervisor:
-    1. Возьмите файл flask_app.conf и переместите в директорию утилиты - /etc/supervisor/conf.d/
-    2. Сделайте $ sudo supervisorctl reload
+
+1.   Возьмите файл flask_app.conf и переместите в директорию утилиты - /etc/supervisor/conf.d/
+
+2.   Сделайте $ sudo supervisorctl reload
     
     
 # Настройка Nginx
