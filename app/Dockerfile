@@ -8,5 +8,5 @@ RUN python -m venv venv && \
 venv/bin/pip install -r requirements.txt && \
 venv/bin/pip install gunicorn
 
-CMD venv/bin/gunicorn -D -b localhost:8000 -w 2 application:application
+CMD venv/bin/gunicorn -b localhost:8000 -w 2 application:application
 
