@@ -1,5 +1,5 @@
 #nginx/
 #supervisor/
-certs/
+#certs/
 venv/
 __pycache__/
