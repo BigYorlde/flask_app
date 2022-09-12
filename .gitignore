@@ -1,5 +1,3 @@
-#nginx/
-#supervisor/
-#certs/
 venv/
 __pycache__/
+.idea
