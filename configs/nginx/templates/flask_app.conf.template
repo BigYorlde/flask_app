@@ -22,7 +22,7 @@ server {
 
     location / {
         # переадресация запросов приложений на сервер gunicorn
-        proxy_pass http://$(NGINX_HOST):8000;
+        proxy_pass http://${NGINX_HOST}:8000;
         proxy_redirect off;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
