@@ -1,4 +1,4 @@
-FROM nginx:1.23.1-alpine
+FROM nginx
 
 COPY ./templates /etc/nginx/templates
 
