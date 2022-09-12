@@ -1,6 +1,6 @@
 server {
     # прослушивание порта 80 (http)
-    listen 80;
+    listen ${NGINX_PORT};
     server_name flask_app;
     location / {
         # перенаправлять любые запросы на один и тот же URL-адрес, как на https
@@ -13,16 +13,16 @@ server {
     server_name flask_app;
 
     # расположение self-signed SSL-сертификата
-    ssl_certificate /home/gunicorn/flask_app/certs/cert.pem;
-    ssl_certificate_key /home/gunicorn/flask_app/certs/key.pem;
+    ssl_certificate /etc/nginx/certs/cert.pem;
+    ssl_certificate_key /etc/nginx/certs/key.pem;
 
     # запись доступа и журналы ошибок в /var/log
-    access_log /var/log/flask_app_access.log;
-    error_log /var/log/flask_app_error.log;
+    #access_log /var/log/flask_app_access.log;
+    #error_log /var/log/flask_app_error.log;
 
     location / {
         # переадресация запросов приложений на сервер gunicorn
-        proxy_pass http://localhost:8000;
+        proxy_pass http://$(NGINX_HOST):8000;
         proxy_redirect off;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
