@@ -1,14 +1,14 @@
-version: "3.9"
-services:
-  flask:
-    image: flask_app:1.0
-    ports:
+version: "3.9"  # Версия docker-compose
+services:       # Наши докер контейнеры
+  flask:        # Name контейнера
+    image: flask_app:1.0    # Из какого образа его запустить
+    ports:                  # Открыть и связать порты в формате local_port:container_port
       - 5000:8000
   nginx_server:
     image: nginx_server:1.0
     ports:
       - 80:80
       - 443:443
-    environment:
+    environment:            # Переменные окружения
       - NGINX_HOST=flask
       - NGINX_PORT=80

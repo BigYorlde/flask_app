@@ -1,5 +1,5 @@
 server {
-    # прослушивание порта 80 (http)
+    # прослушивание порта
     listen ${NGINX_PORT};
     server_name flask_app;
     location / {

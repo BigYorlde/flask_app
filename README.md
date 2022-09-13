@@ -1,63 +1,56 @@
-# flask_app
-Простое web-приложение, написано с помощью фреймворка Flask на python3. Разворачиваем на Linux.За основу взята Ubuntu server 22.04.1. В качестве веб-сервера будем использовать Gunicorn - python-friendly веб-сервер. :) В качестве публичного веб-сервера развернем Nginx.
-# Установка базовых зависимостей.
-Для начала, установим все нужные нам пакеты на сервере с помощью следующих команд:
+# flask_app в Docker
+Шпоргалка предполагает, что докер уже установлен на железо, и Вы знаете, что такое Dockerfile и для чего он нужен, docker image, поэтому мы опустим этот момент.
+С помощью Docker установим Nginx и наше приложение.
+Начнем со скачивания нашего бранча docker этого репозитория на локальную машину:
 
-    $ sudo apt-get -y update
-    $ sudo apt-get -y install python3 python3-venv python3-dev
-    $ sudo apt-get -y install supervisor nginx git
+    $ git clone -b docker --single-branch https://github.com/BigYorlde/flask_app.git ~/flask_app
 
-Затем, убедившись, что находимся в домашней директории нужного нам юзера (который будет все это разворачивать), склонируем репозиторий и зайдем внутрь:
+# Создадим images Nginx и нашего flask_app
 
-    $ git clone https://github.com/BigYorlde/flask_app.git
-    $ cd flask_app/
+Для того, чтобы создать image своего приложения, необходимо выполнить:
 
-Далее, создадим виртуальную среду, запустим ее, и установим все необходимые пакеты, которые для удобства записаны в requirements.txt:
+    $ docker build -t flask_app:1.0 ~/flask_app/app   # В конце путь до Dockerfile
 
-    $ python3 -m venv venv
-    $ source venv/bin/activate
-    (venv) $ pip install -r requirements.txt
+Для image nginx выполним это:
 
-Нам понадобится еще один пакет с нашим веб-сервером, который не занесен в requirements, потому как в локальной среде разработки он не нужен. Выполним:
+    $ docker build -t nginx_server:1.0 ~/flask_app/configs
 
-    (venv) $ pip install gunicorn
+Проверить, что images создались можно командой:
 
-# Настроим Gunicorn и Supervisor
-Для запуска приложения под gunicorn используем:
+    $ docker images    
 
-    (venv) $ gunicorn -b localhost:8000 -w 2 application:application
-    # -b localhost:8000 - установлен порт 8000 внутреннего сетевого интерфейса для прослушки запросов.
-    # -w 2 - сколько процессов может работать одновременно, т.е. сколько клиентов может получить контент в одно время
-    # application:application - файл, содержащий приложение : имя этого приложения
+# Запустим наши контейнеры
+## С помощью Docker
+Шаг 1: Создаем общую сеть для двух контейнеров:
 
-Запуск gunicorn в фоновом режиме без привязки к сессии юзера с помощью Supervisor:
+    $ docker network create flask
 
-1.   Возьмите файл flask_app.conf и переместите в директорию утилиты - /etc/supervisor/conf.d/
+Шаг 2: Запускаем контейнеры
 
-2.   Сделайте $ sudo supervisorctl reload
+    $ docker run -d -p 8000:8000 --net flask_app --name flask flask_app:1.0
+    $ docker run -d -p 80:80 -p 443:443 -e NGINX_HOST=flask -e NGINX_PORT=80 --net flask_app --name nginx_server nginx_server:1.0
+
+-d - запуск контейнера в фоновом режиме
+
+-p - открыть и связать порты в формате local_port:container_port
+
+-e - переменные окружения
+
+--net - задать сеть, в которой будет работать контейнер (создали ее в Шаг 1)
+
+--name - имя контейнера
+
+Шаг 3: Проверьте работоспособность
+
+    $ docker ps  # просмотр запущенных контейнеров
+
+И попробовать зайти на любую страничку нашего сайта:
+
+    http://<ip address of your machine>/
     
-    
-# Настройка Nginx
-*Необзятательно, но мне захотелось :)* Перенаправим весь трафик с 80 порта на 443, т.е. сделаем весь трафик по https. Сделаем сертики:
+## С помощью Docker-compose
+Запускаем docker-compose, используя наш конфиг файл:
 
-    $ mkdir certs
-    $ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout certs/key.pem -out certs/cert.pem
-    
-Удаляем default страницу в Nginx:
-    
-    $ sudo rm /etc/nginx/sites-enabled/default
-    
-И помещаем наш конфиг nginx/flask_app в эту директорию.
-Делаем reload:
+    $ docker-compose -f ~/flask_app/flask_app.yaml -d up
 
-    $ sudo service nginx reload
-    
-Мои поздравления! Сайт доступен по <ip of your VM>
-    
-# Обновляем сайт
-Обновить наш сайт можно следующим образом:
-
-    (venv) $ git pull                              # Скачать новую версию из этого репозитория
-    (venv) $ sudo supervisorctl stop flask_app     # Остановка текущего сервера
-    (venv) $ sudo supervisorctl start flask_app    # Запуск нового сервера
-
+Можно проверять, поднялись ли контейнеры и доступен ли сайт.
