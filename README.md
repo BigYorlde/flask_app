@@ -51,6 +51,6 @@
 ## С помощью Docker-compose
 Запускаем docker-compose, используя наш конфиг файл:
 
-    $ docker-compose -f ~/flask_app/flask_app.yaml -d up
+    $ docker-compose -f ~/flask_app/flask_app.yaml up -d
 
 Можно проверять, поднялись ли контейнеры и доступен ли сайт.
