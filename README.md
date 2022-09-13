@@ -13,7 +13,7 @@
 
 Для image nginx выполним это:
 
-    $ docker build -t nginx_server:1.0 ~/flask_app/configs
+    $ docker build -t nginx_server:1.0 ~/flask_app/configs/nginx
 
 Проверить, что images создались можно командой:
 
