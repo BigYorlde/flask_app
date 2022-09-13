@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  flask:
+    image: flask_app:1.0
+    ports:
+      - 5000:8000
+  nginx_server:
+    image: nginx_server:1.0
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - NGINX_HOST = flask
+      - NGINX_PORT = 80
