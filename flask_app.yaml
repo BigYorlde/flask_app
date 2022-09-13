@@ -10,5 +10,5 @@ services:
       - 80:80
       - 443:443
     environment:
-      - NGINX_HOST = flask
-      - NGINX_PORT = 80
+      - NGINX_HOST=flask
+      - NGINX_PORT=80
