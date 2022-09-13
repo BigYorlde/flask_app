@@ -9,7 +9,7 @@
 
 Затем, убедившись, что находимся в домашней директории нужного нам юзера (который будет все это разворачивать), склонируем репозиторий и зайдем внутрь:
 
-    $ git clone https://github.com/BigYorlde/flask_app.git
+    $ git clone -b main --single-branch https://github.com/BigYorlde/flask_app.git ~/flask_app
     $ cd flask_app/
 
 Далее, создадим виртуальную среду, запустим ее, и установим все необходимые пакеты, которые для удобства записаны в requirements.txt:
