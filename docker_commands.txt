@@ -1,0 +1,38 @@
+docker pull # Загрузить image из удаленного репозитория
+
+
+docker run -d  # Запустить контейнер в фоновом режиме
+docker run -p228:1488  # Запустить контейнер, который слушает порт 228, у которого открыт порт 1488
+docker run redis:4.0 # Запустить контейнер с приложением какой-то версии, по умолчанию - latest
+docker run --name bla_bla
+
+
+docker stop    # Остановить контейнер 
+docker start   # Запустить тот же контейнер, что остановили
+docker ps      # Посмотреть запущенные контейнеры, -а посмотреть все когда-либо запускавшиеся
+
+
+docker images  # Посмотреть докер образы на локальной машине
+
+
+docker logs    # лог контейнера
+
+
+docker build -t my-app:1.0 . #  Создать image моего приложения, . - путь до Dockerfile
+
+
+docker rmi  #  Удалить image
+docker system prune  # Удалить контейнеры
+docker rm   #  Удалить контейнер 
+docker rm -f $(docker ps -aq)        # Delete all Containers
+docker rmi -f $(docker images -q)    # Delete all Images
+
+
+docker exec -it *id_container* /bin/bash (/bin/sh)  #  Войти внутрь контейнера
+
+
+docker-compose -f yaml.yaml up # прочитать из ямла конфиг для запуска N контейнеров
+docker-compose -f yaml.yaml down # остановить все контейнеры из ямла
+
+sudo docker run -d -p 8000:8000 --net flask_app --name flask flask_app:1.0
+sudo docker run -d -p 80:80 -p 443:443 -e NGINX_HOST=flask -e NGINX_PORT=80 --net flask_app --name nginx_server nginx_server:1.0
