@@ -4,7 +4,7 @@ application = Flask(__name__)
 
 @application.route("/")
 def index():
-    return("Hello World from my first Flask's framework website! :)")
+    return("Hello World from my Flask's framework website in Docker! :)")
 
 @application.route("/help")
 def helppage():
